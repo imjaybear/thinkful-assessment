@@ -11,16 +11,18 @@ const sortAccountsByLastName = (accounts) => accounts.sort((accountsA, accountsB
   accountsA.name.last.toLowerCase() > accountsB.name.last.toLowerCase() ? 1:-1) 
 
 function getTotalNumberOfBorrows(account, books) {
- let totalBorrows = 0;
- for (let i = 0; i < books.length; i++) {
-  for (let j = 0; j < books[i].borrows.length; j++) {
-   if (account.id === books[i].borrows[j].id) {
-    totalBorrows += 1;
-   }
+    const { id: accId } = account;
+  
+    return books.reduce((total, book) => {
+      return (
+        total +
+        book.borrows
+          .filter(borrow => borrow.id === accId)
+          .reduce((totalBorrows, borrow) => totalBorrows + 1, 0)
+      );
+    }, 0);
   }
- }
- return totalBorrows;
-}
+ 
  
 
 function getBooksPossessedByAccount(account, books, authors) {
